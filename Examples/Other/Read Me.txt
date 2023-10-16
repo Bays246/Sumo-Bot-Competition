@@ -1,0 +1,42 @@
+Creating a Song by Rhyan McLaughlin
+
+1. Pick a Song
+	-It must be realtively simple, think beginner level piano sheet music
+	-The buzzer is a 2 tone buzzer so options in scale can be somewhat limited as well
+
+2. Translating the Song
+	-If you are unfamiliar with basic music notes and beats you may want to pull up a guide
+	-If the music isn't on beat / properly spaced the notes will play fast
+	-Terminology:
+		# - is a Sharp
+		- - is a Flat
+		< - makes the following not play higher on the scale
+		> - makes the following note play lower on the scale
+		abcdefg - basic music notes
+		R - is a rest
+		X8 - A letter followed imdeatily by a number is how long that note is played 4/8/16.....ect
+		O# - Sets the Octave I tend to use O4
+		T# - sets the temp (Example: T120)
+		L4 - Set all notes to a default beat (Example: L8, defualt is 4)
+		V# - Increases the volume
+		MS - Plays following note in staccato (Example: MSc)
+		ML - Plays following note in Legato (Example: MLc)
+
+	-View the attached picture of song, it roughly translates to
+		- "O4 c c g g a a g8 f f e e d d c8"
+
+3. Put the song in the code as an array
+	const char song_name[] PROGMEM = "O4 c c g g a a g8 f f e e d d c8";
+
+4.Play it
+	Put buzzer.playFromProgramSpace(song_name); in a loop and upload it
+
+
+Also this webpage can be hard to get to but better lists the above info: https://pololu.github.io/a-star-32u4-arduino-library/class_pololu_buzzer.html
+It also has other things to help make the Zumo work
+
+
+
+
+
+		
