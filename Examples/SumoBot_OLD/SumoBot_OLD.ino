@@ -180,7 +180,6 @@ void loop() {
           
           if(flagDisplayUpdate) updateDisplay("Forward", " High");
           if(flagMotorsUpdate) motors.setSpeeds(SPEED_HIGH, SPEED_HIGH);
-          subStateNumber++;
           
           break;
         }
@@ -188,7 +187,6 @@ void loop() {
 
           if(flagDisplayUpdate) updateDisplay("Forward", " Low");
           if(flagMotorsUpdate) motors.setSpeeds(SPEED_LOW, SPEED_LOW);
-          subStateNumber++;
           
           break;
         }
@@ -196,7 +194,6 @@ void loop() {
 
           if(flagDisplayUpdate) updateDisplay("Spin In", " Place R");
           if(flagMotorsUpdate) motors.setSpeeds(SPEED_LOW, -SPEED_LOW);
-          subStateNumber++;
           
           break;
         }
@@ -204,7 +201,6 @@ void loop() {
 
           if(flagDisplayUpdate) updateDisplay("Spin In", " Place L");
           if(flagMotorsUpdate) motors.setSpeeds(-SPEED_LOW, SPEED_LOW);
-          subStateNumber++;
           
           break;
         }
@@ -215,6 +211,17 @@ void loop() {
           
           break;
         }
+      }
+
+      // Default
+      flagMotorsUpdate = false;
+      flagDisplayUpdate = false;
+
+      // Ctrl
+      if(bButtonPressed){
+        subStateNumber++;
+        flagMotorsUpdate = true;
+        flagDisplayUpdate = true;
       }
 
       // Save updated parts of subState.
