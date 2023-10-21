@@ -1,6 +1,7 @@
 /*
  * The main menu to select the desired behaviour of the zumo bot.
- * A to select the current item, B to switch to the next item.
+ * A to select the current item.
+ * B to switch to the next item.
  */
 
 // Variables.

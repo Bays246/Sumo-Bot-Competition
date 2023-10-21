@@ -1,17 +1,4 @@
-// Clears and prints on LCD display using buffer content.
-void updateDisplay(){
-
-  // Update Display.
-  display.clear();
-  display.print(topScreenBuffer);
-  display.gotoXY(0, 1);
-  display.print(bottomScreenBuffer);
-
-  // Display was updated
-  displayFlag = false;
-}
-
-// Overload, clears and prints on the LCD display manually.
+// Clears and prints on the LCD display manually.
 void updateDisplay(String topLine){
   
   // Update Display.
@@ -35,6 +22,14 @@ void updateDisplay(String topLine, String bottomLine){
   displayFlag = false;
 }
 
+// Overload, clears and prints on LCD display using buffer content.
+void updateDisplay(){
+
+  // Call with parameters
+  updateDisplay(topScreenBuffer, bottomScreenBuffer);
+
+}
+
 // Sets motor speed and clears flag.
 void updateMotors(int leftSpeed, int rightSpeed){
 
@@ -43,16 +38,17 @@ void updateMotors(int leftSpeed, int rightSpeed){
 
   // Motor was updated.
   motorFlag = false;
+
+  // Is the bot moving?
+  movingFlag = !(leftMotorBuffer == SPEED_STOP && rightMotorBuffer == SPEED_STOP);
 }
 
-// Overload, sets motor speed and clears flag based on buffers.
+// Overload, sets motor speed and clears flags based on buffers.
 void updateMotors(){
 
-  // Set speeds.
-  motors.setSpeeds(leftMotorBuffer, rightMotorBuffer);
-
-  // Motor was updated.
-  motorFlag = false;
+  // Call with parameters.
+  updateMotors(leftMotorBuffer, rightMotorBuffer);
+  
 }
 
 // Returns the average of the imu values for index x.
@@ -84,6 +80,11 @@ void imuAccel(){
   imuValues[1][imuIndex] = imu.a.y;
   imuValues[2][imuIndex] = imu.a.z;
   imuIndex = (imuIndex + 1) % IMU_SAMPLES;
+
+  // Compare with reference.
+  imuCompare[0] = imuAverage(0) - imuOriginal[0];
+  imuCompare[1] = imuAverage(1) - imuOriginal[1];
+  imuCompare[2] = imuAverage(2) - imuOriginal[2];
 }
 
 // Sets the imu reference to the current averages.

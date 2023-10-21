@@ -5,6 +5,12 @@
  * Utilize delayTimeMillis for delays, otherwise button presses don't register well.
  * Zumo bot utilizes ATmega32U4 AVR microcontroller.
  * There is no way out of the main states besides resetting.
+ * Yes I know that switch takes up a lot of memory, but I don't care and it didn't end up mattering.
+ * 
+ * Zumo 1 needs left motor flipped.
+ * Zumo 2 needs both motors flipped.
+ * 
+ * Zumo 2 has the new motors.
  */
 
 // ----------------------------------------------DEFINITIONS-----------------------------------------------------------------------
@@ -25,18 +31,22 @@ Zumo32U4IMU imu; // Interfaces with the gyroscope/magnetometer/accelerometer uni
 
 // Sensor Sensitivity.
 #define LINE_THRESHOLD 1000 // Reference number for what is considered a white line.
-#define PROX_THRESHOLD 3 // Out of 6 brightness levels, how many needs to trigger the sensor.
-#define ACCEL_THRESHOLD 200 // Reference for movement.
+#define PROX_THRESHOLD 4 // Out of 6 brightness levels, how many needs to trigger the sensor.
+#define ACCEL_THRESHOLD 900 // Reference for movement.
 #define IMU_SAMPLES 5 // Number of samples taken before averaging.
 
-// Motor Speeds.
-#define SPEED_MAX 400 // Max speed is 400 due to Zumo bot itself (The class "Zumo32U4Motors" only allows up to 400).
+// Motor Speeds. Max speed is 400 due to Zumo bot itself (The class "Zumo32U4Motors" only allows up to 400).
+#define SPEED_MAX 400 // FULL POWER.
 #define SPEED_HIGH 300 // High speed, woah.
+#define SPEED_MED 200 // Used for wide turns.
 #define SPEED_LOW 100 // Low speed, wooooaaaahhhh.
 #define SPEED_STOP 0 // Please do not change this from zero.
 
 // Misc
-#define COUNTDOWN_SECONDS 3 // Number of seconds you have to set the robot down in sumo mode.
+#define COUNTDOWN_SECONDS 5 // Number of seconds you have to set the robot down in sumo mode.
+#define LINE_EVADE_TURN_TIME 250 // Number in milliseconds to turn when evading the line on the arena edge.
+#define LINE_EVADE_REVERSE_TIME 200 // Number in milliseconds to back up when evading the line on the arena edge.
+#define MOVEMENT_CHANGE_TIME 100 // Number of milliseconds to wait before recalibrating the Accel unit after changing motor speeds.
 
 // Robot States.
 // The order here determins the order of the menu (Keep stateMainMenu as the first one).
@@ -56,6 +66,7 @@ String bottomScreenBuffer; // Same as topScreenBuffer.
 bool generalFlag = false; // General purpose bool for any reason.
 bool displayFlag = true; // When true, the display needs to be updated.
 bool motorFlag = false; // When true, the motor speed needs updated.
+bool movingFlag = false; // When true, at least one motor is active.
 bool aButtonPressed; // The a button is the leftmost on the Zumo bot.
 bool bButtonPressed; // The b button is the center button on the Zumo bot.
 bool cButtonPressed; // The c button is the rightmost on the Zumo bot.
@@ -71,18 +82,18 @@ unsigned long delayTimeMillis; // Used for delays inside states.
 // Seperate file for each main state.
 #include "SharedFunctions.h"
 #include "MainMenu.h"
-#include "Sumo.h"
 #include "MotorTest.h"
 #include "BatteryTest.h"
 #include "SensorTest.h"
 #include "MusicTest.h"
+#include "Sumo.h"
 
 // ----------------------------------------------PRECONFIG-------------------------------------------------------------------------
 
 void setup() {
   // Initilize motors.
-  motors.flipLeftMotor(true); // I needed to flip the direction of the left motor.
-  motors.flipRightMotor(false); // Just here for my OCD.
+  motors.flipLeftMotor(true); // I needed to flip the direction of motors.
+  motors.flipRightMotor(false); // True Zumo 2, false Zumo 1.
   
   // Initilize basic sensors.
   lineSensors.initThreeSensors(); // Using 3 line sensors.

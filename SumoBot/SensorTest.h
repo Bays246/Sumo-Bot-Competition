@@ -47,11 +47,6 @@ void sensorTest(){
       // Obtain new readings
       imuAccel();
 
-      // Compare with reference.
-      imuCompare[0] = imuAverage(0) - imuOriginal[0];
-      imuCompare[1] = imuAverage(1) - imuOriginal[1];
-      imuCompare[2] = imuAverage(2) - imuOriginal[2];
-
       // Fast refresh (y-axis).
       ledGreen(false);
       ledRed(false);
